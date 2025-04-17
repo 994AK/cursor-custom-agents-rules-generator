@@ -4,18 +4,85 @@ globs:
 alwaysApply: false
 ---
 # Agile Workflow and core memory procedure RULES that MUST be followed EXACTLY!
+All product documents and user stories MUST be placed inside the `.ai/{module_name}/` folder, organized as follows:
+```
+.ai/{module_name}/
+    prd/
+        prd.md
+        architecture.md
+    story/
+        story-1.story.md
+        story-2.story.md
+        ...
+```
 
-1. When coming online, you will first check if a .ai/prd.md file exists, if not, work with the user to create one so you know what the project is about.
-2. If the PRD is not `status: approved`, you will ONLY have the goal of helping improve the .ai/prd.md file as needed and getting it approved by the user to ensure it is the best possible document including the following:
-   - Very Detailed Purpose, problems solved, and story list.
-   - Very Detailed Architecture patterns and key technical decisions, mermaid diagrams to help visualize the architecture.
-   - Very Detailed Technologies, setup, and constraints.
-   - Unknowns, assumptions, and risks.
-   - It must be formatted and include at least everything outlined in the `.cursor/templates/template-prd.md`
-3. Once the PRD is status: approved - IF there is not an architecture.md file that is also status approved, you will either help answer or modify the PRD, or inform the user if he is not asking about the PRD to first ensure the architect completes the architecture document and the user marks it approved before you are allowed to create the first or next user story file.
-4. IF and only IF the PRD and the architecture are both approved, will you then draft the first or next user story.
-- There will only ever be ONE story at most that is in draft or in progress.
-- Never create a new story until the user marks the current story as status: complete.
-- You will follow the .ai/templates/template-story.md exactly including all sections and instructions from the template. You will draft this based on the information you have available in the PRD, the description of the story you are drafting, information from the architecture, and potentially any update notes from the previous closed story if one exists.
-5. You will NEVER modify any files outside of the .ai folder - aside from potentially the root project readme.md file if the user requests it.
+---
 
+## 1. Automatic Module Name Sensing
+
+- Whenever a new requirement or project is initiated, always attempt to **automatically infer the most appropriate `{module_name}`** from the user's input, project context, or existing documentation.
+- Use this inferred name to create and organize all files under `.ai/{module_name}/`.
+- If the module name cannot be confidently determined, **politely ask the user to specify it**.
+- **Never use a generic name like "需求模块" or "module" unless no better name can be inferred.**
+
+---
+
+## 2. PRD Creation
+
+- On startup, first check if a `.ai/{module_name}/prd/prd.md` file exists for the current module.
+    - If not, work with the user to create one so you understand what the project/module is about.
+
+## 3. PRD Approval
+
+- If the PRD is not `status: approved`, your ONLY goal is to help improve the `.ai/{module_name}/prd/prd.md` file and get it approved by the user, ensuring it is the best possible document, including at least:
+    - Very detailed Purpose, Problems Solved, and Story List.
+    - Very detailed Architecture Patterns and Key Technical Decisions, with mermaid diagrams to visualize the architecture.
+    - Very detailed Technologies, Setup, and Constraints.
+    - Unknowns, Assumptions, and Risks.
+    - It must be formatted and include everything outlined in `.cursor/templates/template-prd.md`.
+
+## 4. Architecture Document
+
+- Once the PRD is `status: approved`, check if a `.ai/{module_name}/prd/architecture.md` file exists and is also `status: approved`.
+    - If not, you must either help answer or modify the PRD, or inform the user (if not asking about the PRD) that the architect must complete the architecture document and the user must mark it approved **before you are allowed to create the first or next user story file**.
+
+## 5. User Story Workflow
+
+- IF and ONLY IF both the PRD and the architecture are `status: approved`, draft the first or next user story:
+    - User stories MUST be created in `.ai/{module_name}/story/` as `story-{n}.story.md`, where `{n}` is the next available integer.
+    - There will only ever be ONE story at most that is in draft or in progress.
+    - Never create a new story until the user marks the current story as `status: complete`.
+    - You MUST follow the `.ai/templates/template-story.md` exactly, including all sections and instructions from the template.
+    - Draft stories based on information from the PRD, architecture, the story description, and any update notes from the previous closed story if one exists.
+
+## 6. File Modification Scope
+
+- NEVER modify any files outside of the `.ai/{module_name}/` folder — except for the root project `README.md` file, but only if the user explicitly requests it.
+
+## 7. File Searching and Reference
+
+- When searching for user stories, ALWAYS look recursively in `.ai/{module_name}/story/` for the latest `story-*.story.md` file.
+- When referring to or updating the PRD or architecture, always use `.ai/{module_name}/prd/prd.md` and `.ai/{module_name}/prd/architecture.md`.
+
+---
+
+## General Conduct
+
+- NEVER skip any required fields or sections from the templates.
+- NEVER create or modify files outside the prescribed directories.
+- ALWAYS ask for clarification if any requirement or next step is unclear.
+- Keep outputs clear, concise, and strictly focused on the workflow.
+
+---
+
+## If you ever encounter a situation not covered by these rules, STOP and ask the user for explicit instructions before proceeding.
+
+---
+
+**Automatic Module Name Sensing Example:**
+
+- If the user says, “I want to build a shopping cart feature,” automatically use `.ai/ShoppingCart/` as the module folder.
+- If the user says, “Please help with user authentication,” use `.ai/UserAuthentication/` as the module folder.
+- If the module name is ambiguous, ask the user: “What should we name the current requirement module folder under `.ai/`?”
+- 如用户在需求提出时明确要求“PRD与story同步草拟”，可在PRD草稿输出后，直接草拟首个用户故事，并一并征求用户确认。
+- 仅当用户一次性确认全部内容时，才可同步保存。

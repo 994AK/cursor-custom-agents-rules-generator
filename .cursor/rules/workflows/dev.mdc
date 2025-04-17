@@ -3,32 +3,93 @@ description:
 globs:
 alwaysApply: false
 ---
-# Agile Workflow and core memory procedure RULES that MUST be followed EXACTLY!
 
-1. When coming online, you will first check if a .ai/*.story.md file exists with the highest sequence number and review the story so you know the current phase of the project.
-5. Always use the `.cursor/templates/template-story.md` file as a template for the story. The story will be named <story>-<n>.story.md added to the .ai folder
-   - Example: .ai/story-1.story.md, .ai/story-2.story.md
-6. You will ALWAYS wait for the user to mark the story status as approved before doing ANY work outside of the story file.
-7. You will run tests and ensure tests pass before going to the next subtask within a story.
-8. You will update the story file as subtasks are completed.
-9. Once a Story is complete, you will generate a draft of the next story and wait on approval before proceeding.
-10. If there is no story when you come online that is not in draft or in progress status, request the user work with the PM to draft the next story.
+# .cursor/rules/workflows/dev.mdc
 
-### During Development
+## 1. 总则
 
-- Update story files as subtasks are completed.
-- If you are unsure of the next step, ask the user for clarification, and then update the story as needed to maintain a very clear memory of decisions.
-- Reference the .ai/architecture.md if the story is inefficient or needs additional technical documentation so you are in sync with the Architects plans.
-- When prompted by the user with 'update story', update the current story to:
-  - Reflect the current state.
-  - Clarify next steps.
-  - Ensure the chat log in the story is up to date with any chat thread interactions
-- Continue to verify the story is correct and the next steps are clear.
-- Remember that a story is not complete if you have not also run ALL stories and verified all stories pass.
-- Do not tell the user the story is complete, or mark the story as complete unless you have run ALL the tests.
+- 本规范适用于所有开发者（包括AI助手和人工开发者）。
+- 目标：确保代码质量、流程合规、高效协作，并适配AI自动化开发和敏捷story驱动开发模式。
 
-## YOU DO NOT NEED TO ASK to:
+---
 
-2. Run unit Tests during the development process until they pass.
-3. Update the story AC and tasks as they are completed.
-4. Update the story file with the chat log or other updates to retain the best possible memory of the story status.
+## 2. 目录与文件结构
+
+- 所有 story 文件和相关开发产物**必须存放于 `.ai/{module_name}/story/`**。
+- story 文件命名格式：`.ai/{module_name}/story/story-1.story.md`、`story-2.story.md` 等。
+- **新 story 必须基于 `.cursor/templates/template-story.md` 模板创建。**
+
+---
+
+## 3. 自动模块识别
+
+- 开发者（包括AI）应自动推断当前 `{module_name}`，用于所有文件与目录操作。
+- 如无法确定模块名，应主动向用户/团队确认。
+- 禁止使用“story”、“module”等泛化名称，除非无更优选择。
+
+---
+
+## 4. Story驱动开发流程
+
+- **所有开发、讨论、代码实现、评审、测试，均以当前 story 为唯一依据。**
+- 每次上线或切换开发任务，**须先读取本模块下 story 目录中序号最高的 story 文件，确认开发阶段**。
+- **未获用户/团队批准的 story，不得提前开展开发、提交或修改。**
+- **如当前 story 完成，须生成下一个 story 草稿，待用户/团队批准后方可继续。**
+
+---
+
+## 5. 批量上下文获取与缓存
+
+- 每次新story开发前，**应一次性批量收集本模块相关 story、PRD、架构、API、主要视图、组件、路由等核心上下文，并缓存于当前会话。**
+- **仅在 story 状态变更、文件结构变更或用户/团队主动要求时，才重新检索和同步上下文。**
+- 严禁为同一story重复发起低价值的逐步查找调用。
+
+---
+
+## 6. 代码提交与分支管理
+
+- 所有代码变更须遵循分支管理规范（如feature/xxx、bugfix/xxx等）。
+- 禁止直接修改主分支（如master/main），除非获团队批准。
+- 每次提交须附带对应 story 编号和简要说明。
+
+---
+
+## 7. 代码评审与文档同步
+
+- 所有代码变更须通过评审，确保符合规范、无明显缺陷。
+- 相关文档（如PRD、架构、API等）须与代码同步更新。
+- story文件须及时记录开发、测试、评审等关键过程及结论。
+
+---
+
+## 8. 测试与持续集成
+
+- 新增/修改功能须有充分单元测试，确保主要逻辑覆盖。
+- 变更提交前须通过自动化测试和持续集成流程。
+
+---
+
+## 9. 行为准则
+
+- 遇到流程或格式不明确处，**优先查阅本规范**，如仍有疑问，**须暂停并请示用户/团队**，不得擅自决策。
+- 严禁跨越或省略任何必需开发环节（如需求确认、文档同步、测试、代码审查等）。
+- 所有输出须体现专业性、技术深度与最佳实践，但不得超出本规范允许范围。
+- **仅允许在 `.ai/{module_name}/story/` 目录内修改文件，除非用户/团队明确授权。**
+
+---
+
+## 10. AI调用额度优化
+
+- **所有准备/查找操作应合并为一次批量调用，后续仅在上下文变更时重新检索。**
+- 开发助手须缓存本次会话的上下文信息，聚焦story开发、测试与反馈，最大化调用利用率。
+
+---
+
+## 11. 例外与补充
+
+- 如遇本规范未覆盖的新场景，**须暂停并请示用户/团队，获得明确指示后方可继续**。
+- 本规范应随着团队实际需求和AI能力持续迭代优化。
+
+---
+
+> **说明**：本规范已适配AI自动化开发与敏捷story驱动流程，任何团队成员如有优化建议，欢迎随时补充。

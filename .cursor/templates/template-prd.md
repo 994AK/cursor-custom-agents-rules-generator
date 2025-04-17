@@ -1,5 +1,7 @@
 # 1. Title: {PRD for {project}}
 
+> ⚠️ 本PRD仅作为需求范围说明，实际开发请严格以Story为准。
+
 <version>1.0.0</version>
 
 ## Status: { Draft | Approved }
@@ -37,6 +39,8 @@
 
 ### Epic-N: Future Epic Enhancements (Beyond Scope of current PRD)
 
+> **注意：开发人员请勿直接以Epic或PRD描述为开发蓝本，必须以下方Story列表为开发分解依据。每个Story均包含明确的开发内容和验收标准。**
+
 ## Epic 1: Story List
 
 <example>
@@ -53,6 +57,18 @@
   - Route post body specifies the number of posts, articles, and comments to return
   - Create a command in package.json that I can use to call the API Route (route configured in env.local)
     </example>
+
+## Development Guidance
+
+- 开发团队必须以本PRD下属的Story为唯一开发依据，**不得直接根据PRD整体描述进行开发**。
+- 每个Story包含具体的开发任务、验收标准和状态，开发前需逐条阅读并确认Story内容。
+- 如Story未补充或不明确，请及时与产品经理沟通，补充完整后方可进入开发阶段。
+- 仅在Story状态为“Approved”或“Ready for Development”时，方可开始开发。
+- 开发须知：
+  - 请严格按照上述Requirements实现，未尽事宜请及时反馈。
+  - Story状态为“Approved”后方可进入开发。
+
+
 
 ## Technology Stack
 
